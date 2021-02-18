@@ -3,7 +3,7 @@ let allPartners = ss
   .getSheetByName('Partner Names')
   .getDataRange()
   .getValues()
-  .map((row) => row[0]);
+  .map((row) => row[0].toLowerCase());
 
 /**
  *
@@ -22,7 +22,7 @@ function onEdit(e) {
     return;
   }
 
-  const userInput = e.range.getValue();
+  const userInput = e.range.getValue().toLowerCase();
 
   if (userInput.toString().trim().length === 0) {
     return;
