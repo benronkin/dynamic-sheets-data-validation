@@ -1,20 +1,18 @@
-const ss = SpreadsheetApp.getActiveSpreadsheet();
-let allPartners = ss
-  .getSheetByName('Partner Names')
-  .getDataRange()
-  .getValues()
-  .map((row) => row[0].toLowerCase());
-
 /**
  *
  * @param {*} e
  */
 // eslint-disable-next-line no-unused-vars
 function onEdit(e) {
-  const sheet = ss.getActiveSheet();
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const allCompanies = ss
+    .getSheetByName('Companies')
+    .getDataRange()
+    .getValues()
+    .map((row) => row[0].toLowerCase());
 
   const inDroppableCell =
-    sheet.getName() === 'View' &&
+    ss.getActiveSheet().getName() === 'Edit' &&
     e.range.getColumn() === 1 &&
     e.range.getRow() !== 1;
 
@@ -22,17 +20,19 @@ function onEdit(e) {
     return;
   }
 
-  const userInput = e.range.getValue().toLowerCase();
+  const userInput = e.range.getValue().toString().toLowerCase();
 
   if (userInput.toString().trim().length === 0) {
     return;
   }
 
-  const matchedPartners = allPartners.filter((row) => row.includes(userInput));
+  const matchedCompanies = allCompanies.filter((row) =>
+    row.includes(userInput)
+  );
+  matchedCompanies.splice(500, matchedCompanies.length);
+
   const rule = SpreadsheetApp.newDataValidation()
-    .requireValueInList(matchedPartners)
+    .requireValueInList(matchedCompanies)
     .build();
   e.range.setDataValidation(rule);
 }
-
-
